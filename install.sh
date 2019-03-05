@@ -1,20 +1,8 @@
-#!/bin/sh
+#!/usr/bin/env zsh
 
+# Save install directory (default $HOME)
 [[ -n $1 ]] && INSTALL_DIR="$1" || INSTALL_DIR="$HOME"
 echo "INSTALL_DIR=$INSTALL_DIR" >> ".config"
-ZTERM_HOME="$INSTALL_DIR/.zterm"
-
-# Disable login message
-touch "$HOME/.hushlogin"
-
-# Install zsh to /usr/local/bin
-brew install zsh
-
-# Add homebrew-installed zsh to recognized shells
-sudo sh -c "echo /usr/local/bin/zsh >> /etc/shells"
-
-# Change default shell to zsh
-chsh -s "/usr/local/bin/zsh"
 
 # clone rdefig/prezto.git
 git clone --recursive https://github.com/rdefig/prezto.git "$INSTALL_DIR/.zprezto"
@@ -28,12 +16,8 @@ for rcfile in "$INSTALL_DIR"/.zprezto/runcoms/^README.md(.N); do
   ln -s "$rcfile" "$INSTALL_DIR/.${rcfile:t}"
 done
 
-# install hack nerd font
-brew tap caskroom/fonts
-brew cask install font-hack-nerd-font
-
 # symlink prompt_jumbozshrimp_setup (use the FULL path to the file!)
-ln -s "$INSTALL_DIR/.zprezto/modules/prompt/external/jumbo-zshrimp/jumbo-zshrimp.zsh" "$INSTALL_DIR/.zprezto/modules/prompt/functions/prompt_jumbozshrimp_setup"
+ln -sf "$INSTALL_DIR/.zprezto/modules/prompt/external/jumbo-zshrimp/jumbo-zshrimp.zsh" "$INSTALL_DIR/.zprezto/modules/prompt/functions/prompt_jumbozshrimp_setup"
 
 # Add Jumbo ZSHrimp submodule to prezto repo
 cd $INSTALL_DIR"/.zprezto" && git submodule add https://github.com/rdefig/jumbo-zshrimp.git $INSTALL_DIR"/.zprezto/modules/prompt/external/jumbo-zshrimp"
